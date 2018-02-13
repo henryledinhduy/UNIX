@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#name[id] -> name
+#value[id|2016] -> 
+
+
+for i in 1 2 3; do
+  printf "Enter name: "
+  read ten
+  declare -A name
+
+  eval "name[2016|$i]=\$ten"
+  echo $i
+done
+
+echo ${name[2017|0]}

@@ -1,0 +1,22 @@
+#! /bin/bash
+#: Name		: Duy Le
+#: Student Nr	: 1403722
+#: Description  : Exercise 1, Problem Set 1
+
+function valid_int() #@ USAGE: valid_int [numbers...]
+{                    #@ RETURN: false | true if wrong | right
+  for n in "$@"; do
+    case $n in
+     "" | *[!0-9]*) echo "input Error" ; return 1 ;;
+    esac
+  done
+}
+
+function _sum() #@ USAGE _sum [diferent numbers..]
+{               #@ RETURN $_SUM
+  for n in "$@"; do
+    _SUM=$(( ${_SUM:=0} + $n ))
+  done
+}
+
+valid_int $@ && _sum $@ && echo "$_SUM"

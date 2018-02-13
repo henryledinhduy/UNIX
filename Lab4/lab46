@@ -1,0 +1,104 @@
+#! /bin/bash
+#: Name		: Duy Le-Dinh
+#: Student Nr	: 1403722
+#: Description	: Exercise 6, Problem set 4
+
+export file="/home/duyledinh/Dropbox/Shell/mot-company_supports-2010_16csv"
+
+## Check if file exist or not
+if [ ! -f "$file" ]
+then
+  echo "File not found!"
+  exit 0
+fi
+
+valid_number() #@ USAGE: valid_number [$]
+{              #@ DESCRIPTION: This function check if the number if OK
+  [ -z $1 ] && return 1
+  case $1 in
+    *[!0-9]*) return 1 ;;
+    *) return 0 ;;
+  esac
+}
+
+check_year() #@ USAGE: check_year [year] [year_begin] [year_end]
+{            #@ DESCRIPTION: Check if year is in year set. 
+  for (( y=$2; y<=$3; y++ )); do
+    [ "$y" == "$1" ] && return 0
+  done
+  return 1
+}
+
+## Take advance of sorting to reduce execution time of post process
+cat $file | sort > temp
+
+## Variables init
+prev_name=
+prev_year=
+total_support=0
+all_year_support=0
+
+search_hint=${1:?}
+year_range=${2:?}
+year_end=${year_range:0:4}
+year_begin=${year_range:5:9}
+
+while IFS=';' read name ID year value nip
+do
+  ## Remove blank character and remove the support_form out of the paid amount
+  value=${value//[[:blank:]]/}
+  value=${value%\,*}
+  
+  ## Ensure that there is no corrupted info or empty info 
+  valid_number $value || value=0
+
+  if ! [[ "$name" =~  "$search_hint" ]]; then
+    continue
+  fi
+  
+  if [ "$name" != "$prev_name" ]; then
+    ## If this is the first company, then don't print these under 2 lines.
+    if [ "$first_company" != "true" ]; then
+      ## For every line that related to money, check if year is valid
+      check_year "$prev_year" "$year_begin" "$year_end" &&
+        printf "Support %s: %s,  " "$prev_year" "${total_support}" 
+        printf "\nSupport over the years %s: %s" "$year_range" "$all_year_support"
+    else
+      unset first_company
+    fi
+    total_support=0
+    all_year_support=0
+    printf "\nCompany name: %s\n" "$name"
+
+    check_year "$year" "$year_begin" "$year_end" &&
+      total_support=$(( $total_support + $value )) &&
+      all_year_support=$(( $all_year_support + $total_support ))
+  else
+    if [ "$year" != "$prev_year" ] ; then
+      check_year "$prev_year" "$year_begin" "$year_end" &&
+        printf "Support %s: %s,  " "$prev_year" "${total_support}" 
+      total_support=0
+      check_year "$year" "$year_begin" "$year_end" &&
+        total_support=$(( $total_support + $value ))     
+    else
+      check_year "$year" "$year_begin" "$year_end" &&
+        total_support=$(( $total_support + $value ))
+    fi
+    check_year "$year" "$year_begin" "$year_end" &&
+      all_year_support=$(( $all_year_support + $total_support ))
+  fi
+  
+  prev_name=${name}
+  prev_year=${year}
+
+done < temp
+
+## Print for the last company
+[ "$name" != "$prev_name" ] || [ "$year" != "$prev_year" ] &&
+  check_year "$prev_year" "$year_begin" "$year_end" &&
+    printf "Support %s: %s,  " "$prev_year" "${total_support}"
+
+echo "Job Done!"
+ 
+## Delete the temp file.
+rm temp

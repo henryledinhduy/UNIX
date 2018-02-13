@@ -1,0 +1,20 @@
+#! /bin/bash
+#: Name		: Duy Le
+#: Student Nr	: 1403722
+#: Description  : Exercise 1, Problem Set 1
+
+function _valid_int() {
+  for n in "$@"; do
+    case $n in
+     "" | *[!0-9]*) echo "input Error" ; return 1 ;;
+    esac
+  done
+}
+
+function _sum() {
+  for n in "$@"; do
+    _SUM=$(( ${_SUM:=0} + $n ))
+  done
+}
+
+_valid_int $@ && _sum $@ && echo "$_SUM"

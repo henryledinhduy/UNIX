@@ -1,0 +1,12 @@
+#! /bin/bash
+#: Description    : Excercise 1, lab 3
+
+NAME="Duy Le"
+EMAIL="dinhduy.le@metropolia.fi"
+
+echo Your name is $NAME and your email address is $EMAIL
+
+
+
+
+

@@ -1,0 +1,9 @@
+#! /bin/bash
+#: Description		: Test file
+
+printf "Enter something: "
+
+read a b c
+
+[ -z "$a" ] && "Enter a: " &&
+[ -z "$b" ] && "Enter b: " 

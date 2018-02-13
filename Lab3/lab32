@@ -1,0 +1,8 @@
+#! /bin/bash
+#: Description    : Exercise 2, lab 3
+#: Detail         : Print the content of All files in a folder
+
+## Is it consider as cheating or good solution?
+
+more * | cat
+

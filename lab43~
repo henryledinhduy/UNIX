@@ -1,0 +1,13 @@
+#! /bin/bash
+#: Name		: Duy Le-Dinh
+#: Student Nr	: 1403722
+#: Description	: Exercise 3, Problem set 4
+
+#@ Shell Script that reads contents of a *company.csv file.
+
+export file="/home/duyledinh/Dropbox/Shell/mot-company_supports-2010_16csv"
+
+while IFS=';' read
+do
+  echo "$REPLY"
+done < "$file"

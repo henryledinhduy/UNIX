@@ -1,0 +1,11 @@
+#! /bin/bash
+#: Name           : Duy Le-Dinh
+#: Student number : 1403722
+#: Description    : Exercise 3, Lab 3
+
+printf "Enter the name of the file: "
+read name
+
+sort -k 2 "$name" |  head -n 3
+
+
