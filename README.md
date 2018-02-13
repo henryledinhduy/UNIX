@@ -1,2 +1,2 @@
 # UNIX
-Solutions to some University Exercise
+Solutions to some University Exercises
